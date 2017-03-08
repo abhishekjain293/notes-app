@@ -1,7 +1,62 @@
 <html>
 <head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+<link rel="stylesheet" href="styles.css">
+<style type="text/css">
+    [v-cloak] { display: none; }
+</style>
 </head>
 <body>
+<body>
+  <section class="noteapp">
+  <!-- For getting input from user about the notes-->
+  <header class="header">
+    <h1>notes</h1>
+    <textarea class="new-note"
+      autofocus autocomplete="off"
+      placeholder="Save a Note?"
+      v-model="newNote"></textarea>
+	  <button type="button" style="width:100%" class="btn btn-primary" v-on:click="addNote">ADD NOTE</button>
+  </header>
+  
+  <section class="main" v-show="notes.length" v-cloak>
+    <!--<input class="toggle-all" type="checkbox" v-model="allDone">-->
+    <ul class="note-list">
+      <li v-for="note in filteredNotes"
+        class="note"
+        :key="note.id"
+        :class="{ archive: note.archive, editing: note == editedNote }">
+        <div class="view">
+          <input class="toggle" type="checkbox" v-model="note.archive">
+          <label @dblclick="editNote(note)">{{ note.title | truncate '20' }}</label>
+          <span style="position: absolute;top: 0;right: 10px;bottom: 0;width: 40px;height: 40px;
+    margin: auto 0;"@click="removeNote(note)" class="glyphicon glyphicon-remove"></span>
+        </div>
+        <textarea class="edit" type="text"
+          v-model="note.title"
+          v-note-focus="note == editedNote"
+          @blur="doneEdit(note)"
+          @keyup.esc="cancelEdit(note)"></textarea>
+		  <button type="button" style="width:100%" class="btn btn-primary" v-on:click="doneEdit(note)">EDIT NOTE</button>
+      </li>
+    </ul>
+  </section>
+  <footer class="footer" v-show="notes.length" v-cloak>
+    
+    <ul class="filters">
+      <li><a href="#/all" :class="{ selected: visibility == 'all' }">All</a></li>
+      <li><a href="#/non_archive" :class="{ selected: visibility == 'non_archive' }">Non_Archive</a></li>
+      <li><a href="#/archive" :class="{ selected: visibility == 'archive' }">Archive</a></li>
+    </ul>
+    
+  </footer>
+</section>
+<footer class="info">
+  <p>Double-click to edit a note</p>
+  
+</footer>
+</body></html>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.0.3/vue.js"></script>
+<script src="myscript.js"></script>
 </body>
 </head>
